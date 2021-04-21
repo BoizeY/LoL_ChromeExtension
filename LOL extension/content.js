@@ -180,7 +180,7 @@ function TableCellFunction(rowNum, cellNum) {
   //data comparsion
   let message;
   let skillRating = {
-    R_totalGame:0,
+    R_totalGame: 0,
     R_winRate: 0.0,
     R_kda: 0.0,
     R_cs: 0.0,
@@ -206,7 +206,7 @@ function TableCellFunction(rowNum, cellNum) {
   if (skillRating.R_kda > 1) {
     skillRating.ratingCount++;
   }
-  if (skillRating.R_cs > 1) {
+  if (skillRating.R_cs > 1.5) {
     skillRating.ratingCount++;
   }
   if (skillRating.R_dmgDealt > 1.15) {
@@ -220,16 +220,28 @@ function TableCellFunction(rowNum, cellNum) {
 
   //////////////////// RECOMMENDATION DECISION LOGIC /////////////////////////
 
-  if(skillRating.R_totalGame < 5){
-    modalSugTextDisplay.innerText = "Looks like you are new to this champion. I suggestion that you take a quick look at this guide at how to play this champion";
-  }
-  // if player's cs per minute is much lower than the top players
-  if (skillRating.ratingCount >= 3) {
+  if (skillRating.R_totalGame < 30) {
     modalSugTextDisplay.innerText =
-      "getting some pro coaching is the best way to understand how to get better at a champion. We think the following videos could be useful to get started.";
-
-    modalSugVideo.innerHTML =
-      '<iframe width="560" height="315" style="display: block; margin-left: auto; margin-right: auto;" src="https://www.youtube.com/embed/Sdz_s0dOLF4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></br></br>';
+      "Looks like you are new to this champion. I suggestion that you take a quick look at this guide at how to play this champion";
+    modalSugVideo.innerHTML = topData.vidBasicGuide;
+  }
+  // if player's
+  else if (skillRating.ratingCount >= 3) {
+    modalSugTextDisplay.innerText =
+      "Looks like you are struggling playing the current role! Here is a guide on some the most common mistakes people make in this role. Fixing these mistake will great increase you chances of winning";
+    modalSugVideo.innerHTML = topData.vidRoleMistake;
+  } else if (skillRating.R_cs > 1.5) {
+    modalSugTextDisplay.innerText =
+      "Keeping pace in farm ensure you stay relevant in levels and items, and increases you chance of winning fights. Here is a tutorial on how to effectively farm with this champion";
+    modalSugVideo.innerHTML = topData.vidFarming;
+  } else if (skillRating.R_kda > 1) {
+    modalSugTextDisplay.innerText =
+      "Looks like you are not contributing during fight. This could be you are dying too early in fights, or your not effectively assisting your teammates during fights";
+    modalSugVideo.innerHTML = topData.vidTeamFight;
+  } else if (skillRating.R_dmgTaken > 1.15 || skillRating.R_dmgDealt > 1.15) {
+    modalSugTextDisplay.innerText =
+      "looks like you taking too much or not dealing enough damage for your role on " + topData.champName + " we suggest that you take a look at this video on how to be more effect at dealing damage and avoiding taking unnecessary damage";
+    modalSugVideo.innerHTML = topData.vidDueling;
   }
 
   //console.log(modalCompareDisplay);
